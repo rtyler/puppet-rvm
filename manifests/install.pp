@@ -22,4 +22,12 @@ define rvm::install() {
       path        => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
       require     => User[$name];
   }
+  file {
+    "/home/${name}/.rvm/archives" :
+      ensure  => directory,
+      require => User[${name}],
+      mode    => '0755',
+      owner   => ${name},
+      group   => ${name};
+  }
 }
