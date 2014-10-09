@@ -25,9 +25,9 @@ define rvm::install() {
   file {
     "/home/${name}/.rvm/archives" :
       ensure  => directory,
-      require => User[${name}],
+      require => Exec["install rvm for ${name}"],
       mode    => '0755',
-      owner   => ${name},
-      group   => ${name};
+      owner   => $name,
+      group   => $name;
   }
 }
