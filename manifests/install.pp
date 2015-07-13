@@ -1,7 +1,16 @@
-
 define rvm::install() {
   exec {
-    "download rvm for ${name}" :
+     "import rvm gpg keys" :
+      cwd         => "/home/${name}",
+      command     => 'curl -sSL https://rvm.io/mpapis.asc | gpg --import -',
+      user        => $name,
+      environment => ["HOME=/home/${name}"],
+      provider    => shell,
+      path        => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+      notify      => Exec["download rvm for ${name}"],
+      require     => User[$name];
+
+   "download rvm for ${name}" :
       creates => "/home/${name}/.rvm/scripts/rvm",
       cwd     => "/home/${name}",
       command => 'curl -L get.rvm.io -o install-rvm.sh',
