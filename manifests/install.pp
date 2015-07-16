@@ -17,7 +17,7 @@ define rvm::install() {
       user    => $name,
       path    => ['/bin', '/usr/bin'],
       notify  => Exec["install rvm for ${name}"],
-      require => User[$name];
+      require => [User[$name], Exec["import rvm gpg keys"]];
 
     "install rvm for ${name}" :
       creates     => "/home/${name}/.rvm/scripts/rvm",
@@ -29,7 +29,7 @@ define rvm::install() {
       logoutput   => on_failure,
       refreshonly => true,
       path        => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
-      require     => User[$name];
+      require     => [User[$name], Exec["download rvm for ${name}"]];
   }
   file {
     "/home/${name}/.rvm/archives" :
